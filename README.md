@@ -18,10 +18,11 @@ Aplicación interactiva de preguntas de opción múltiple para terminal, pensada
 ## Características
 
 - Selección interactiva de categoría y cantidad de preguntas.
-- Preguntas barajadas aleatoriamente mediante Fisher–Yates.
+- Preguntas seleccionadas de la categoría y barajadas aleatoriamente mediante Fisher–Yates.
 - Indicador de progreso, puntuación, explicaciones y revisión de respuestas incorrectas.
 - Interfaz de terminal con colores ANSI, sin dependencias externas.
 - Posibilidad de repetir el cuestionario.
+- Validación de las opciones de menú y manejo de errores durante la carga de las preguntas.
 
 ## Requisitos
 
@@ -111,7 +112,14 @@ La aplicación presenta todas las preguntas de la categoría por defecto y ofrec
 
 ## Preguntas y categorías
 
-El archivo `test-app/test-app/data/questions.json` contiene un objeto `categories`. Cada categoría tiene un nombre y una lista de preguntas; cada pregunta contiene `question`, `options`, `answer` y, opcionalmente, `explanation`. El campo `answer` es un índice de base cero en `options` (por ejemplo, `0` identifica la primera opción). Para ampliar el cuestionario, añade entradas siguiendo esta estructura y conserva índices de respuesta válidos. La aplicación compara ese índice con el índice de la opción seleccionada por el usuario.
+El archivo `test-app/test-app/data/questions.json` contiene un objeto `categories`. Cada categoría usa una clave identificadora (por ejemplo, `javascript`) y contiene un `name` visible en el menú y una lista `questions`. Cada pregunta contiene:
+
+- `question`: texto que se muestra al usuario.
+- `options`: opciones de respuesta en el orden en que se presentan.
+- `answer`: índice de base cero de la respuesta correcta dentro de `options` (por ejemplo, `0` identifica la primera opción).
+- `explanation` (opcional): explicación que se muestra después de responder.
+
+Para añadir preguntas, agrega objetos con esa forma al archivo JSON y asegúrate de que `answer` sea un índice válido de `options`. Para añadir una categoría, incorpora otra entrada en `categories` con `name` y `questions`. La interfaz ofrece el total de preguntas, y las opciones de 3 y 5 preguntas cuando hay suficientes. La selección de cantidad toma las primeras preguntas de la lista; después, la clase `Quiz` las baraja para presentarlas en orden aleatorio.
 
 ## Configuración
 
