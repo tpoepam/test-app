@@ -37,7 +37,7 @@ El paquete de la aplicación está en `test-app/test-app`. Desde la raíz de est
 cd test-app/test-app
 ```
 
-No se declaran dependencias de terceros en `package.json`; la aplicación utiliza módulos integrados de Node.js. Por tanto, no es necesario instalar paquetes adicionales. Para una instalación de dependencias reproducible si se incorporan dependencias en el futuro, puede usarse `npm install`.
+No se declaran dependencias de terceros en `package.json`; la aplicación utiliza módulos integrados de Node.js. Por tanto, no es necesario ejecutar `npm install` para usar la versión actual.
 
 ## Uso
 
@@ -53,7 +53,7 @@ El comando ejecuta `node index.js`. También se puede iniciar directamente:
 node index.js
 ```
 
-Sigue las indicaciones de la terminal para elegir una categoría, escoger el número de preguntas disponibles, responder introduciendo el número de una opción y decidir si quieres volver a jugar. Las preguntas e indicaciones de la interfaz se muestran en inglés. Las respuestas válidas se numeran desde `1`; el programa vuelve a solicitar la entrada si se introduce una opción fuera de rango.
+Sigue las indicaciones de la terminal para elegir una categoría, escoger el número de preguntas disponibles, responder introduciendo el número de una opción y decidir si quieres volver a jugar. Las preguntas e indicaciones de la interfaz se muestran en inglés. Las respuestas válidas se numeran desde `1`; el programa vuelve a solicitar la entrada si se introduce una opción fuera de rango. La confirmación para repetir acepta respuestas que comiencen por `y` (por ejemplo, `y` o `yes`); cualquier otra respuesta termina la sesión.
 
 Ejemplo del flujo interactivo (las opciones dependen de la categoría elegida):
 
@@ -111,7 +111,27 @@ La aplicación presenta todas las preguntas de la categoría por defecto y ofrec
 
 ## Preguntas y categorías
 
-El archivo `test-app/test-app/data/questions.json` contiene un objeto `categories`. Cada categoría tiene un nombre y una lista de preguntas; cada pregunta contiene `question`, `options`, `answer` y, opcionalmente, `explanation`. El campo `answer` es un índice de base cero en `options` (por ejemplo, `0` identifica la primera opción). Para ampliar el cuestionario, añade entradas siguiendo esta estructura y conserva índices de respuesta válidos. La aplicación compara ese índice con el índice de la opción seleccionada por el usuario.
+El archivo `test-app/test-app/data/questions.json` contiene un objeto `categories`. Cada categoría tiene un nombre y una lista de preguntas; cada pregunta contiene `question`, `options`, `answer` y, opcionalmente, `explanation`. Ejemplo de una entrada válida:
+
+```json
+{
+  "categories": {
+    "mi-categoria": {
+      "name": "Mi categoría",
+      "questions": [
+        {
+          "question": "¿Cuál es la respuesta correcta?",
+          "options": ["Primera", "Segunda"],
+          "answer": 1,
+          "explanation": "La segunda opción es la correcta."
+        }
+      ]
+    }
+  }
+}
+```
+
+El campo `answer` es un índice de base cero en `options` (por ejemplo, `0` identifica la primera opción). Para ampliar el cuestionario, añade categorías o preguntas siguiendo esta estructura y conserva índices de respuesta válidos. La aplicación compara ese índice con el índice de la opción seleccionada por el usuario. Las preguntas se barajan al comenzar cada partida; las opciones mantienen el orden definido en el JSON.
 
 ## Configuración
 
