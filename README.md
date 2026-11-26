@@ -53,7 +53,26 @@ El comando ejecuta `node index.js`. También se puede iniciar directamente:
 node index.js
 ```
 
-Sigue las indicaciones de la terminal para elegir una categoría, escoger el número de preguntas disponibles, responder introduciendo el número de una opción y decidir si quieres volver a jugar. Las respuestas válidas se numeran desde `1`; el programa vuelve a solicitar la entrada si se introduce una opción fuera de rango.
+Sigue las indicaciones de la terminal para elegir una categoría, escoger el número de preguntas disponibles, responder introduciendo el número de una opción y decidir si quieres volver a jugar. Las preguntas e indicaciones de la interfaz se muestran en inglés. Las respuestas válidas se numeran desde `1`; el programa vuelve a solicitar la entrada si se introduce una opción fuera de rango.
+
+Ejemplo del flujo interactivo (las opciones dependen de la categoría elegida):
+
+```text
+Choose a category:
+  1. JavaScript Basics
+  2. Node.js Fundamentals
+  3. General Programming
+
+Your choice (enter number): 1
+How many questions?
+  1. All questions
+  2. 3 questions
+  3. 5 questions
+
+Your choice (enter number): 2
+```
+
+A continuación, el programa solicita que se pulse Enter para continuar y presenta las preguntas una por una. Al terminar, muestra la puntuación y pregunta si se desea jugar otra vez (`y` para sí).
 
 Las categorías y cantidades disponibles actualmente son:
 
@@ -92,7 +111,11 @@ La aplicación presenta todas las preguntas de la categoría por defecto y ofrec
 
 ## Preguntas y categorías
 
-El archivo `test-app/test-app/data/questions.json` contiene un objeto `categories`. Cada categoría tiene un nombre y una lista de preguntas; cada pregunta contiene `question`, `options`, `answer` y, opcionalmente, `explanation`. El campo `answer` es un índice de base cero en `options` (por ejemplo, `0` identifica la primera opción). Para ampliar el cuestionario, añade entradas siguiendo esta estructura y conserva índices de respuesta válidos.
+El archivo `test-app/test-app/data/questions.json` contiene un objeto `categories`. Cada categoría tiene un nombre y una lista de preguntas; cada pregunta contiene `question`, `options`, `answer` y, opcionalmente, `explanation`. El campo `answer` es un índice de base cero en `options` (por ejemplo, `0` identifica la primera opción). Para ampliar el cuestionario, añade entradas siguiendo esta estructura y conserva índices de respuesta válidos. La aplicación compara ese índice con el índice de la opción seleccionada por el usuario.
+
+## Configuración
+
+No se definen variables de entorno ni archivos de configuración adicionales. La selección de categorías, preguntas y explicaciones se administra en `data/questions.json`; los comandos disponibles y el requisito de Node.js se declaran en `package.json`.
 
 ## Pruebas
 
