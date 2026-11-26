@@ -1,61 +1,48 @@
 # Quiz CLI
 
-Aplicación interactiva de preguntas de opción múltiple para terminal, pensada para practicar conceptos de JavaScript, Node.js y programación general. El proyecto también ilustra conceptos básicos de JavaScript moderno y Node.js, como ES modules, programación asíncrona, operaciones con archivos, entrada por consola y programación orientada a objetos.
-
-## Tabla de contenidos
-
-- [Características](#características)
-- [Requisitos](#requisitos)
-- [Instalación](#instalación)
-- [Uso](#uso)
-- [Estructura del proyecto](#estructura-del-proyecto)
-- [Cómo funciona](#cómo-funciona)
-- [Preguntas y categorías](#preguntas-y-categorías)
-- [Pruebas](#pruebas)
-- [Tecnologías y dependencias](#tecnologías-y-dependencias)
-- [Licencia](#licencia)
+Aplicación interactiva de preguntas de opción múltiple para terminal. Permite practicar conceptos de JavaScript, Node.js y programación general mediante cuestionarios organizados por categorías.
 
 ## Características
 
 - Selección interactiva de categoría y cantidad de preguntas.
-- Preguntas barajadas aleatoriamente mediante Fisher–Yates.
-- Indicador de progreso, puntuación, explicaciones y revisión de respuestas incorrectas.
-- Interfaz de terminal con colores ANSI, sin dependencias externas.
-- Posibilidad de repetir el cuestionario.
+- Preguntas seleccionadas al azar mediante el algoritmo Fisher–Yates.
+- Barra de progreso, puntuación, explicaciones y repaso de respuestas incorrectas.
+- Interfaz de consola con colores ANSI, sin dependencias externas.
+- Opción para volver a jugar al finalizar.
 
 ## Requisitos
 
-- Node.js **18.0.0 o superior** (requisito declarado en `package.json`).
-- npm, incluido normalmente con Node.js, para ejecutar los scripts del proyecto.
-- Una terminal interactiva para responder a las preguntas.
+- Node.js **18.0.0 o superior**.
+- npm para ejecutar los scripts definidos en el paquete.
+- Una terminal interactiva.
 
 ## Instalación
 
-El paquete de la aplicación está en `test-app/test-app`. Desde la raíz de este repositorio:
+Desde la raíz del repositorio, cambia al directorio que contiene `package.json`:
 
 ```bash
 cd test-app/test-app
 ```
 
-No se declaran dependencias de terceros en `package.json`; la aplicación utiliza módulos integrados de Node.js. Por tanto, no es necesario instalar paquetes adicionales. Para una instalación de dependencias reproducible si se incorporan dependencias en el futuro, puede usarse `npm install`.
+No hace falta instalar dependencias adicionales: el proyecto utiliza módulos integrados de Node.js y `package.json` no declara dependencias npm de terceros.
 
 ## Uso
 
-Desde `test-app/test-app`, inicia el programa con:
+Inicia el cuestionario desde `test-app/test-app`:
 
 ```bash
 npm start
 ```
 
-El comando ejecuta `node index.js`. También se puede iniciar directamente:
+También puedes ejecutarlo directamente:
 
 ```bash
 node index.js
 ```
 
-Sigue las indicaciones de la terminal para elegir una categoría, escoger el número de preguntas disponibles, responder introduciendo el número de una opción y decidir si quieres volver a jugar. Las preguntas e indicaciones de la interfaz se muestran en inglés. Las respuestas válidas se numeran desde `1`; el programa vuelve a solicitar la entrada si se introduce una opción fuera de rango.
+El programa te guiará para elegir una categoría, seleccionar cuántas preguntas responder y contestar cada pregunta introduciendo el número de una opción. Si la entrada no corresponde a una opción válida, volverá a solicitarla. Antes de cada pregunta (y antes de comenzar) se puede pulsar Enter para continuar. Al finalizar se muestra el resultado y se ofrece jugar otra vez (`y` para sí).
 
-Ejemplo del flujo interactivo (las opciones dependen de la categoría elegida):
+Ejemplo del menú que presenta la aplicación:
 
 ```text
 Choose a category:
@@ -68,21 +55,17 @@ How many questions?
   1. All questions
   2. 3 questions
   3. 5 questions
-
-Your choice (enter number): 2
 ```
 
-A continuación, el programa solicita que se pulse Enter para continuar y presenta las preguntas una por una. Al terminar, muestra la puntuación y pregunta si se desea jugar otra vez (`y` para sí).
+Las categorías incluidas contienen cinco preguntas cada una:
 
-Las categorías y cantidades disponibles actualmente son:
-
-| Categoría | Preguntas |
+| Categoría | Número de preguntas |
 | --- | ---: |
 | JavaScript Basics | 5 |
 | Node.js Fundamentals | 5 |
 | General Programming | 5 |
 
-La aplicación presenta todas las preguntas de la categoría por defecto y ofrece opciones de 3 o 5 preguntas cuando hay suficientes. Al finalizar muestra el resultado y las respuestas incorrectas para repaso.
+La opción `All questions` utiliza todas las preguntas disponibles de la categoría. Las opciones de 3 y 5 preguntas aparecen si la categoría tiene suficientes preguntas.
 
 ## Estructura del proyecto
 
@@ -94,46 +77,51 @@ La aplicación presenta todas las preguntas de la categoría por defecto y ofrec
         ├── data/
         │   └── questions.json  # Categorías, preguntas, opciones, respuestas y explicaciones
         ├── src/
-        │   ├── colors.js       # Utilidades de formato ANSI para la terminal
-        │   ├── input.js        # Interfaz readline y prompts interactivos
-        │   └── quiz.js         # Lógica de cuestionario, puntuación y resultados
-        ├── index.js            # Punto de entrada y flujo principal de la aplicación
-        └── package.json        # Metadatos, scripts, tipo de módulo y versión mínima de Node
+        │   ├── colors.js       # Formato ANSI para la terminal
+        │   ├── input.js        # Entrada interactiva con readline
+        │   └── quiz.js         # Barajado, flujo, puntuación y resultados
+        ├── index.js            # Punto de entrada y carga de datos
+        └── package.json        # Metadatos, scripts y requisitos de Node.js
 ```
 
-## Cómo funciona
+## Arquitectura y funcionamiento
 
-1. `index.js` carga `data/questions.json` con `node:fs/promises` y muestra el menú de categorías.
-2. `src/input.js` gestiona los prompts de consola con el módulo integrado `node:readline`.
-3. `src/quiz.js` crea una instancia de `Quiz`, baraja las preguntas, valida las respuestas seleccionadas y mantiene el progreso y la puntuación.
-4. La aplicación muestra el resultado final, las respuestas erróneas y sus respuestas correctas, y pregunta si se desea jugar otra vez.
-5. `src/colors.js` aplica estilos mediante secuencias ANSI. No se utiliza ninguna biblioteca de color externa.
+- `index.js` carga `data/questions.json` usando `node:fs/promises`, muestra la bienvenida y coordina el ciclo principal del juego.
+- `src/input.js` implementa selección de opciones, confirmaciones y pausas mediante el módulo integrado `node:readline`.
+- `src/quiz.js` contiene la clase `Quiz`: baraja preguntas con Fisher–Yates, registra respuestas y puntuación, muestra el progreso y presenta los resultados.
+- `src/colors.js` proporciona funciones de formato con secuencias ANSI.
+- Al terminar, el programa muestra la puntuación, un mensaje según el rendimiento y, si hubo errores, las respuestas correctas para repaso.
 
-## Preguntas y categorías
+## Datos de preguntas
 
-El archivo `test-app/test-app/data/questions.json` contiene un objeto `categories`. Cada categoría tiene un nombre y una lista de preguntas; cada pregunta contiene `question`, `options`, `answer` y, opcionalmente, `explanation`. El campo `answer` es un índice de base cero en `options` (por ejemplo, `0` identifica la primera opción). Para ampliar el cuestionario, añade entradas siguiendo esta estructura y conserva índices de respuesta válidos. La aplicación compara ese índice con el índice de la opción seleccionada por el usuario.
+Las categorías y preguntas se mantienen en `test-app/test-app/data/questions.json`. El archivo contiene un objeto `categories`; cada categoría tiene un `name` y un arreglo `questions`. Cada pregunta usa esta estructura:
 
-## Configuración
-
-No se definen variables de entorno ni archivos de configuración adicionales. La selección de categorías, preguntas y explicaciones se administra en `data/questions.json`; los comandos disponibles y el requisito de Node.js se declaran en `package.json`.
-
-## Pruebas
-
-El proyecto declara este script:
-
-```bash
-npm test
+```json
+{
+  "question": "Texto de la pregunta",
+  "options": ["Opción A", "Opción B", "Opción C"],
+  "answer": 1,
+  "explanation": "Explicación opcional de la respuesta."
+}
 ```
 
-Ejecuta `node --test` desde `test-app/test-app`. No se encontraron archivos de pruebas en la estructura disponible, así que el repositorio no documenta actualmente casos de prueba propios.
+`answer` es el índice basado en cero de la respuesta correcta dentro de `options` (en el ejemplo, la segunda opción). Para añadir preguntas, conserva esa estructura y asegúrate de que el índice corresponda a una opción existente. `explanation` es opcional.
 
-## Tecnologías y dependencias
+## Scripts disponibles
 
-- JavaScript con módulos ES (`"type": "module"`).
-- Node.js y sus módulos integrados: `node:fs/promises`, `node:path`, `node:url` y `node:readline`.
-- No hay dependencias npm de terceros declaradas.
-- Scripts npm: `start` y `test`.
+Ejecuta estos comandos desde `test-app/test-app`:
+
+| Comando | Acción |
+| --- | --- |
+| `npm start` | Inicia la aplicación (`node index.js`). |
+| `npm test` | Ejecuta el test runner integrado de Node.js (`node --test`). |
+
+No se encontraron archivos de pruebas en la estructura disponible; `npm test` ejecuta el runner, pero el repositorio no documenta casos propios.
+
+## Configuración y dependencias
+
+No se definen variables de entorno ni archivos de configuración adicionales. El proyecto utiliza módulos ES (`"type": "module"`) y módulos integrados de Node.js, incluidos `node:fs/promises`, `node:path`, `node:url` y `node:readline`. No hay dependencias npm de terceros declaradas.
 
 ## Licencia
 
-El `package.json` declara la licencia **MIT**.
+El archivo `package.json` declara la licencia MIT.
